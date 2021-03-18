@@ -17,9 +17,9 @@ app.use(bodyParser.json());
 const toneAnalyzer = new toneAnalyzerV3({
   version: '2017-09-21',
   authenticator: new IamAuthenticator({
-    apikey: process.env.APIKEY || "cBIoI3yc6zbkcNAacueh-MoU8yLd_2_lwgRX7jpAsEs4",
+    apikey: process.env.APIKEY,
   }),
-  url: process.env.URL || "https://api.us-south.tone-analyzer.watson.cloud.ibm.com",
+  url: process.env.URL,
   disableSslVerification: true
 });
 
@@ -34,12 +34,13 @@ const text = 'Team, I know that times are tough! Product '
 
 app.post('/get-tone', async function(req, res, next) {
   const toneParams = {
-    toneInput: { 'text': text },
+    toneInput: { 'text': req.body.text },
     contentType: 'application/json',
   };
     toneAnalyzer.tone(toneParams)
     .then(toneAnalysis => {
       console.log(JSON.stringify(toneAnalysis, null, 2));
+      res.send(JSON.stringify(toneAnalysis, null, 2));
       //res.render("index", {
       //  response:JSON.stringify(toneAnalysis, null, 2)
       //});
