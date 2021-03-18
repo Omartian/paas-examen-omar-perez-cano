@@ -1,44 +1,57 @@
-const http = require('http');
+'use strict';
 
-const hostname = '127.0.0.1';
-const port = 3000;
+require('dotenv');
 
-const ToneAnalyzerV3 = require('ibm-watson/tone-analyzer/v3');
+
+const express = require('express');
+const bodyParser = require('body-parser');
+const app = express();
+const toneAnalyzerV3 = require('ibm-watson/tone-analyzer/v3');
 const { IamAuthenticator } = require('ibm-watson/auth');
 
-const toneAnalyzer = new ToneAnalyzerV3({
+app.use(bodyParser.urlencoded({
+  extended: true
+}));
+app.use(bodyParser.json());
+
+const toneAnalyzer = new toneAnalyzerV3({
   version: '2017-09-21',
   authenticator: new IamAuthenticator({
-    apikey: process.env.TONE_ANALYZER_IAM_APIKEY,
+    apikey: process.env.APIKEY || "cBIoI3yc6zbkcNAacueh-MoU8yLd_2_lwgRX7jpAsEs4",
   }),
-  serviceUrl: process.env.TONE_ANALYZER_URL,
+  url: process.env.URL || "https://api.us-south.tone-analyzer.watson.cloud.ibm.com",
+  disableSslVerification: true
+});
+
+app.get('/', function(req, res) {
+  res.send('Tone Analyzer using IBM Cloud Node app example');
 });
 
 const text = 'Team, I know that times are tough! Product '
-  + 'sales have been disappointing for the past three '
-  + 'quarters. We have a competitive product, but we '
-  + 'need to do a better job of selling it!';
++ 'sales have been disappointing for the past three '
++ 'quarters. We have a competitive product, but we '
++ 'need to do a better job of selling it!';
 
-const toneParams = {
-  toneInput: { 'text': text },
-  contentType: 'application/json',
-};
-
-toneAnalyzer.tone(toneParams)
-  .then(toneAnalysis => {
-    console.log(JSON.stringify(toneAnalysis, null, 2));
-  })
-  .catch(err => {
-    console.log('error:', err);
-  });
-
-const server = http.createServer((req, res) => {
-  res.statusCode = 200;
-  res.setHeader('Content-Type', 'text/plain');
-  res.end('Hola Mundo');
+app.post('/get-tone', async function(req, res, next) {
+  const toneParams = {
+    toneInput: { 'text': text },
+    contentType: 'application/json',
+  };
+    toneAnalyzer.tone(toneParams)
+    .then(toneAnalysis => {
+      console.log(JSON.stringify(toneAnalysis, null, 2));
+      //res.render("index", {
+      //  response:JSON.stringify(toneAnalysis, null, 2)
+      //});
+    })
+    .catch(err => {
+      console.log('error:', err);
+    });
 });
 
-server.listen(port, hostname, () => {
-  console.log(`El servidor se está ejecutando en http://${hostname}:${port}/`);
-});
+const port = process.env.PORT || 3000;
 
+app.listen(port, function() {
+  // eslint-disable-next-line no-console
+  console.log('Server running on port: %d', port);
+});
