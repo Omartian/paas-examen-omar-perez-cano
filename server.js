@@ -14,6 +14,9 @@ app.use(bodyParser.urlencoded({
 }));
 app.use(bodyParser.json());
 
+console.log(process.env.APIKEY);
+console.log(process.env.URL);
+
 const toneAnalyzer = new toneAnalyzerV3({
   version: '2017-09-21',
   authenticator: new IamAuthenticator({
