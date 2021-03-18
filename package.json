@@ -1,0 +1,29 @@
+{
+  "name": "paas-examen-omar-perez-cano",
+  "version": "1.0.0",
+  "description": "paas examen cloud",
+  "main": "app.js",
+  "dependencies": {
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "ibm-watson": "^5.7.1",
+    "tough-cookie": "^4.0.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "node app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Omartian/paas-examen-omar-perez-cano.git"
+  },
+  "keywords": [
+    "cloud"
+  ],
+  "author": "omar perez cano",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Omartian/paas-examen-omar-perez-cano/issues"
+  },
+  "homepage": "https://github.com/Omartian/paas-examen-omar-perez-cano#readme"
+}
